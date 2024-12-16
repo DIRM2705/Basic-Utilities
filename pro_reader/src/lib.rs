@@ -1,5 +1,5 @@
 use std::io::{stdin, Write, stdout};
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 
 #[no_mangle]
 pub extern "C" fn read_int(instruction : *const u8) -> i32 {
@@ -41,14 +41,12 @@ pub extern "C" fn read_bool(instruction : *const u8) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn read_string(instruction : *const u8) -> *const u8 {
-    return read_input(instruction).as_ptr() as *const u8;
+pub extern "C" fn read_string(instruction : *const u8) -> *const i8{
+    let c_string = CString::new(read_input(instruction)).unwrap();
+    return c_string.into_raw();
 }
 
 fn read_input(instruction : *const u8) -> String {
-    //Flush stdout
-    stdout().flush().unwrap();
-
     // Print the instruction
     let c_str: &CStr = unsafe { CStr::from_ptr(instruction as *const i8) };
     let str_slice: &str = c_str.to_str().unwrap();
@@ -58,8 +56,7 @@ fn read_input(instruction : *const u8) -> String {
     let mut input = String::new();
     match stdin().read_line(&mut input) {
         Ok(_) => input = input.trim().to_string(),
-        Err(err) => println!("{err}")
-        
+        Err(err) => println!("{err}")   
     }
 
     return input
