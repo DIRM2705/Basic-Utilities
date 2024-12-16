@@ -10,6 +10,6 @@ typedef struct Menu
 
 Menu* new_menu(char* title);
 void add_option(Menu* menu, char* option);
-void print_menu(Menu* menu);
+unsigned int read_option(Menu* menu);
 
 #endif

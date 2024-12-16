@@ -51,7 +51,19 @@ pub extern "C" fn add_option(menu : &mut Menu, option : *const u8) {
 }
 
 #[no_mangle]
-pub extern "C" fn print_menu(menu : &mut Menu)
+pub extern "C" fn read_option(menu : &mut Menu) -> u32 {
+    /*
+        Reads an option from the console
+        RETURNS:
+            u32 : The option read
+    */
+    print_menu(menu);
+    let mut option = String::new();
+    std::io::stdin().read_line(&mut option).unwrap();
+    return option.trim().parse().unwrap();
+}
+
+fn print_menu(menu : &mut Menu)
 {
     /*
         Prints the menu to the console
@@ -61,6 +73,7 @@ pub extern "C" fn print_menu(menu : &mut Menu)
     
     unsafe {
         println!("-------- {} --------", CStr::from_ptr(menu.name as *const i8).to_str().unwrap());
+        println!("Seleccione una opción:");
         for i in 0..menu.options_size {
             println!("{}. {}", i+1, CStr::from_ptr(*menu.options.offset(i as isize) as *const i8).to_str().unwrap());
         }

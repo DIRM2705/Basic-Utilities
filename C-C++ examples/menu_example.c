@@ -6,6 +6,6 @@ int main() {
     add_option(menu, "Option 2");
     add_option(menu, "Option 3");
 
-    print_menu(menu);
+    unsigned int opc = read_option(menu);
     return 0;
 }
