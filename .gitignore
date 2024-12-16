@@ -1,3 +1,4 @@
 */target/
 /BasicUtilitiesLibs
 *.exe
+/C-C++ examples/*/*.dll
