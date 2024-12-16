@@ -1,4 +1,4 @@
-use std::io::{stdin, Write, stdout};
+use std::io::stdin;
 use std::ffi::{CStr, CString};
 
 #[no_mangle]
