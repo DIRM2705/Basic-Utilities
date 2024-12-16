@@ -33,10 +33,3 @@ class ProReader:
     
     def read_bool(self, instruction : str) -> bool:
         return self.dll.read_bool(instruction.encode())
-    
-if __name__ == "__main__":
-    reader = ProReader("target/debug/pro_reader.dll")
-    #print(reader.read_int("int"))
-    #print(reader.read_float("float"))
-    print(reader.read_string("string"))
-    #print(reader.read_bool("bool"))
