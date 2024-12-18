@@ -2,3 +2,5 @@
 /BasicUtilitiesLibs
 *.exe
 /C-C++ examples/*/*.dll
+/Python examples/*/*.dll
+/Python examples/__pycache__/
