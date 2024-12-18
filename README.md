@@ -9,18 +9,22 @@ Basic utilities es un conjunto de bibliotecas diseñados para facilitar las tare
 1. Elige la librería o librerías que deseas agregar a tu proyecto.
 
 2. Ve a la carpeta de la librería y ubica la subcarpeta *headers*
-![carpeta pro_reader](https://imgur.com/NNdpkFY)
+
+![carpeta pro_reader](https://imgur.com/NNdpkFY.png)
 
 3. Dentro de headers, descarga el archivo para tu lenguaje (*.h si es C o C++, *.py para Python)
-![headers pro_reader](https://imgur.com/yKuYmj2)
+
+![headers pro_reader](https://imgur.com/yKuYmj2.png)
 
 4. Ve a la sección de [releases](https://github.com/DIRM2705/Basic-Utilities/releases) de este repositorio
-![seccion releases](https://imgur.com/32IC2VX)
+
+![seccion releases](https://imgur.com/32IC2VX.png)
 
 5. Descarga el dll de la librería que desees agregar. Puede que veas varias versiones, recomiendo que descargues la última.
 
 6. Crea tu proyecto. En una carpeta crea tu codigo fuente, agrega el header y el dll.
-![carpeta proyecto](https://imgur.com/9nU1aow)
+
+![carpeta proyecto](https://imgur.com/9nU1aow.png)
 
 7. Incluye el header a tu código fuente
 
@@ -55,7 +59,7 @@ Reemplaza tu_archivo.c por tu archivo de codigo fuente y libreria1.dll, libreria
 
 Puedes ver las funciones de cada librería y su uso en los siguientes enlaces
 
-* [Menu builder]()
+* [Menu builder](https://github.com/DIRM2705/Basic-Utilities/tree/main/menu_builder#readme)
 * [Pro reader]()
 
 ### Créditos
