@@ -60,7 +60,7 @@ Reemplaza tu_archivo.c por tu archivo de codigo fuente y libreria1.dll, libreria
 Puedes ver las funciones de cada librería y su uso en los siguientes enlaces
 
 * [Menu builder](https://github.com/DIRM2705/Basic-Utilities/tree/main/menu_builder#readme)
-* [Pro reader]()
+* [Pro reader](https://github.com/DIRM2705/Basic-Utilities/blob/main/pro_reader/README.MD)
 
 ### Créditos
 * [Daniel Rosas](https://github.com/DIRM2705)
