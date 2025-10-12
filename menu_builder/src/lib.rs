@@ -1,56 +1,71 @@
-use std::{ffi::CStr, io::stdin};
+use std::ffi::{CStr, CString};
+use std::io::stdin;
+use std::os::raw::c_char;
 
 #[repr(C)]
 pub struct Menu {
-    pub name: *const u8,
-    pub options_size: u32,
-    pub options: *const *const u8,
+    name: *mut c_char,
+    options_size: u32,
+    options: *mut *mut c_char,
 }
 
 #[no_mangle]
-pub extern "C" fn new_menu(name: *const u8) -> *mut Menu {
+pub extern "C" fn new_menu(name: *const c_char) -> *mut Menu {
     /*
         Creates a new menu struct with the given name
         PARAMS:
-            name : *const u8 : The name of the menu
+            name : *const c_char : The name of the menu
         RETURNS:
             *mut Menu : The created menu
     */
+
+    let name = unsafe { CStr::from_ptr(name) };
+    let name = name.to_owned();
+    let name = CString::into_raw(name);
+
     let menu = Box::new(Menu {
         name,
-        options: std::ptr::null(),
+        options: std::ptr::null_mut(),
         options_size: 0,
     });
     return Box::into_raw(menu);
 }
 
+// new_menu: duplicate name into CString::into_raw()
+
+// add_option: duplicate incoming C string
 #[no_mangle]
-pub extern "C" fn add_option(menu: &mut Menu, option: *const u8) {
+pub extern "C" fn add_option(menu: &mut Menu, option: *const c_char) {
     /*
        Adds a new option to the menu
        PARAMS:
            menu : &mut Menu : The menu to add the option to
-           option : *const u8 : The string of the option to add
+           option : *const c_char : The string of the option to add
     */
 
-    let mut options;
-    if menu.options.is_null() {
-        options = vec![option];
-    } else {
-        options = unsafe {
-            //Convert the raw pointer to a Vec
-            Vec::from_raw_parts(
-                menu.options as *mut *const u8,
-                menu.options_size as usize,
-                menu.options_size as usize,
-            )
-        };
-        options.push(option);
+    if option.is_null() {
+        return;
     }
+    unsafe {
+        let c = CStr::from_ptr(option);
+        let owned = CString::new(c.to_bytes()).unwrap();
+        let ptr = owned.into_raw(); // now Rust owns it
 
-    menu.options = options.as_ptr(); //Convert the Vec to a raw pointer
-    menu.options_size = options.len() as u32; //Update the size of the options
-    std::mem::forget(options);
+        if menu.options.is_null() {
+            let v = vec![ptr].into_boxed_slice();
+            menu.options = Box::into_raw(v) as *mut *mut c_char;
+            menu.options_size = 1;
+        } else {
+            let len = menu.options_size as usize;
+            // reconstruct box, convert to Vec, push, box again
+            let mut v = Vec::from_raw_parts(menu.options, len, len);
+            v.push(ptr);
+            let new_len = v.len() as u32;
+            let boxed = v.into_boxed_slice();
+            menu.options = Box::into_raw(boxed) as *mut *mut c_char;
+            menu.options_size = new_len;
+        }
+    }
 }
 
 #[no_mangle]
@@ -69,7 +84,7 @@ pub extern "C" fn read_option(menu: &mut Menu) -> u32 {
         } else {
             println!("Ingrese una opción válida");
         }
-    }    
+    }
 }
 
 fn print_menu(menu: &mut Menu) {
@@ -107,7 +122,7 @@ fn read_int() -> u32 {
             Ok(_) => input = input.trim().to_string(),
             Err(err) => println!("{err}"),
         }
-        
+
         // Parse the input
         match input.parse() {
             Ok(num) => return num,
