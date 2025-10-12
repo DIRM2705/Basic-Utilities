@@ -7,4 +7,4 @@ menu.add_option("Option 3")
 menu.add_option("Option 4")
 
 option = menu.read_option()
-print("Option selected: " + option)
+print("Option selected: " + str(option))
