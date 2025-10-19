@@ -1,6 +1,8 @@
 #include "menu_builder.h"
+#include <stdio.h>
 
 int main() {
+    printf("Menu builder example\n");
     Menu* menu = new_menu("Main Menu");
     add_option(menu, "Option 1");
     add_option(menu, "Option 2");
