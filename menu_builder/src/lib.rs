@@ -4,9 +4,9 @@ use std::os::raw::c_char;
 
 #[repr(C)]
 pub struct Menu {
-    name: *mut c_char,
+    name: *const c_char,
     options_size: u32,
-    options: *mut *mut c_char,
+    options: *const *const c_char,
 }
 
 #[no_mangle]
@@ -53,16 +53,16 @@ pub extern "C" fn add_option(menu: &mut Menu, option: *const c_char) {
 
         if menu.options.is_null() {
             let v = vec![ptr].into_boxed_slice();
-            menu.options = Box::into_raw(v) as *mut *mut c_char;
+            menu.options = Box::into_raw(v) as *const *const c_char;
             menu.options_size = 1;
         } else {
             let len = menu.options_size as usize;
             // reconstruct box, convert to Vec, push, box again
-            let mut v = Vec::from_raw_parts(menu.options, len, len);
+            let mut v = Vec::from_raw_parts(menu.options as *mut *mut c_char, len, len);
             v.push(ptr);
             let new_len = v.len() as u32;
             let boxed = v.into_boxed_slice();
-            menu.options = Box::into_raw(boxed) as *mut *mut c_char;
+            menu.options = Box::into_raw(boxed) as *const *const c_char;
             menu.options_size = new_len;
         }
     }
